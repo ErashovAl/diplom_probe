@@ -1,0 +1,178 @@
+@baseUrl = http://127.0.0.1:8000/api/v1
+
+
+### #SHOPS
+#список магазинов if state==True
+GET {{baseUrl}}/shops
+
+
+###    #USER_REGISTER
+POST {{baseUrl}}/user/register/
+Content-Type: application/json
+
+{
+    "first_name": "userreg1",
+    "last_name": "regi",
+    "email": "userreg1@admin.ru",
+    "password": "adminadmin",
+    "company": "regi-1",
+    "position": "Менеджер",
+    "phone": "2341"
+}
+
+###
+#USER/CONFIRM_email_token
+#сделаем пользователя активным
+
+POST {{baseUrl}}/user/register/confirm/
+Content-Type: application/json
+
+{
+    "email": "admin01@admin.ru",
+    "token": "e914a14aecc8812f1ea035340ba0505b38ffb683ded"
+}
+
+
+### #USER_LOGIN
+POST {{baseUrl}}/user/login/
+Content-Type: application/json
+
+{
+    "email": "6six@admin.ru",
+    "password": "adminadmin"
+}
+
+
+### #добавляем адрес для юзера, чей токен предоставлен
+#юзер должен быть активен
+POST  {{baseUrl}}/api/v1/user/addresses/
+Content-Type: application/json
+Authorization: token 42f9482753114787aae8489851268c574ff334eb
+
+{
+    "city": "mosurg",
+    "street": "lenin",
+    "house": "5",
+    "structure": "none",
+    "building": "none",
+    "apartment": "13"
+}
+
+### #запрос списка адресов . Адрес можно получить только свой
+GET {{baseUrl}}/user/addresses?10
+Content-Type: application/json
+Authorization: token 42f9482753114787aae8489851268c574ff334eb
+
+
+### меняем статус приема заказов
+POST {{baseUrl}}/api/v1/partner/state/ HTTP/1.1
+Content-Type: application/json
+Authorization: token 22141c6b5c552d379660c3efaf50db3545a14545
+
+
+{   
+    "state": "off"
+}
+
+### #PARTNER_REGISTER
+POST {{baseUrl}}/partner/register/
+Content-Type: application/json
+
+{
+    "email": "admin11@admin.ru",
+    "password": "adminadmin",
+    "company": "newcomp",
+    "phone": "876765412"
+}
+
+
+###
+#запрос списка данных по юзеру.
+GET {{baseUrl}}/user/details/
+Content-Type: application/json
+Authorization: token 42f9482753114787aae8489851268c574ff334eb
+
+
+###сброс пароля поставщика (если активный)
+POST {{baseUrl}}/user/password_reset/
+Content-Type: application/json
+
+{
+    "email": "partner4@admin.ru"
+}
+
+###************************************************************
+
+
+###
+POST {{baseUrl}}/user/password_reset/confirm/
+Content-Type: application/json
+
+{
+    "email": "nick@admin.ru",
+    "password": "adminadmin",
+    "token": "89eba9ef0f98d4267760b80a0c9c9103325b1ff6"
+
+}
+
+
+
+###
+
+POST {{baseUrl}}/api/v1/partner/update
+Content-Type: application/json
+Authorization: token 582cb5d73ca5414e421f1bb844a43536782d421c
+
+{"url": "https://cloud.mail.ru/public/HdXW/Rfp2wTD5W"}
+
+###
+
+POST {{baseUrl}}/api/v1/partner/update/ HTTP/1.1
+Content-Type: multipart/form-data
+Authorization: token 22141c6b5c552d379660c3efaf50db3545a14545
+
+{
+    "url": "",
+    "file": "@data.shop1.yaml;type=application/x-yaml"
+}
+
+
+
+
+
+
+###partner-update
+POST {{baseUrl}}api/v1/partner/update/ http/1.1
+Content-Type: multipart/form-data;boundary="boundary"
+Authorization: token 22141c6b5c552d379660c3efaf50db3545a14545
+
+--boundary
+Content-Disposition: form-data; name="url"
+
+--boundary
+Content-Disposition: attachment; name="file; "filename="shop1.yaml";
+# Content-Type: application/octet-stream
+
+--boundary--
+
+###
+POST {{baseUrl}}/api/v1/partner/update/
+Content-Type: multipart/form-data
+Authorization: token 22141c6b5c552d379660c3efaf50db3545a14545
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="shop1.yaml"
+Content-Type: application/json
+
+< .shop1.yaml >
+--boundary
+
+###
+POST {{baseUrl}}/api/v1/partner/update/
+Content-Type: multipart/form-data
+Authorization: token 22141c6b5c552d379660c3efaf50db3545a14545
+
+
+{
+  "url": "https://example.com/price_list.csv"
+}
